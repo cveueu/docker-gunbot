@@ -93,11 +93,12 @@ RUN apk update \
   && printf "jq '.GUI.port = ${GBPORT}' /tmp/config3.js > /tmp/config4.js\n" >> gunbot/startup.sh \
   && printf "jq '.GUI.key = \"localhost.key\"' /tmp/config4.js > /tmp/config5.js\n" >> gunbot/startup.sh \
   && printf "jq '.GUI.cert = \"localhost.crt\"' /tmp/config5.js > ${GBINSTALLLOC}/config.js\n" >> gunbot/startup.sh \
-  && printf "chronyd -d || :\n" >> gunbot/startup.sh \
+  && printf "set -m\n" >> gunbot/startup.sh \
+  && printf "chronyd -d & || :\n" >> gunbot/startup.sh \
   && printf "${GBINSTALLLOC}/gunthy-linux\n" >> gunbot/startup.sh
 
 
-FROM alpine:latest
+FROM ubuntu:jammy
 ARG MAINTAINER
 ARG WEBSITE
 ARG DESCRIPTION
