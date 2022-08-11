@@ -93,8 +93,7 @@ RUN apk update \
   && printf "jq '.GUI.port = ${GBPORT}' /tmp/config3.js > /tmp/config4.js\n" >> gunbot/startup.sh \
   && printf "jq '.GUI.key = \"localhost.key\"' /tmp/config4.js > /tmp/config5.js\n" >> gunbot/startup.sh \
   && printf "jq '.GUI.cert = \"localhost.crt\"' /tmp/config5.js > ${GBINSTALLLOC}/config.js\n" >> gunbot/startup.sh \
-  && printf "set -m\n" >> gunbot/startup.sh \
-  && printf "chronyd -d & || :\n" >> gunbot/startup.sh \
+  && printf "service chrony start\n" >> gunbot/startup.sh \
   && printf "${GBINSTALLLOC}/gunthy-linux\n" >> gunbot/startup.sh
 
 
@@ -116,8 +115,8 @@ COPY --from=gunbot-builder /tmp/gunbot ${GBINSTALLLOC}
 
 WORKDIR ${GBINSTALLLOC}
 
-RUN apk update \
-  && apk add --no-cache chrony libc6-compat gcompat libstdc++ jq unzip openssl \
+RUN apt update \
+  && apt install -y chrony libc6 libstdc++6 jq curl unzip openssl \
   && rm -rf /var/lib/apt/lists/* \
   && chmod +x "${GBINSTALLLOC}/startup.sh"
 
